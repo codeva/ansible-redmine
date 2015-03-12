@@ -38,6 +38,17 @@
   args:
     chdir: "{{ redmine_path }}"
   when: redmine_update
+  
+- name: Copy database dump file to remote
+  copy: src={{ redmine_db_dump }} dest=/tmp/redmine_db_dump.sql
+  when: redmine_db_dump is defined
+
+- name: Import database dump
+  mysql_db: name="{{ redmine_db_name }}" login_host="{{ redmine_db_host }}" \
+            login_user="{{ redmine_db_username }}" \
+            login_password="{{ redmine_db_password }}" \
+            state=import target="/tmp/redmine_db_dump.sql"
+  when: redmine_db_dump is defined
 
 - name: Migrate database
   shell: bundle exec rake db:migrate RAILS_ENV=production 
@@ -67,7 +78,7 @@
   shell: RAILS_ENV=production rake db:migrate
   args:
    chdir: "{{ redmine_path }}"
-  when: not redmine_update
+  when: not redmine_update and ( redmine_db_dump is not defined )
   
 - name: Set database default data
   shell: RAILS_ENV=production REDMINE_LANG="{{ redmine_lang }}" rake redmine:load_default_data
