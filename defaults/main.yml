@@ -1,35 +1,21 @@
 ---
-db_host: "127.0.0.1"
-db_name: "redmine"
-db_username: "admin"
-db_password: "unaContrasenia"
 
-
-mysql_port: 3306
-mysql_bind_addres: "0.0.0.0"
-mysql_root_password: "dificil"
-mysql_databases:
- - name: "{{ db_name }}"
-
-mysql_users:
- - name: "{{ db_username }}"
-   pass: "{{ db_password }}"
-   priv: "{{ db_name }}.*:ALL"
-
-redmine_domain: "name.domain"
-redmine_files: "{{ redmine_path }}/files"
-redmine_lang: "es"
+redmine_version: 2.6.2
+redmine_db_host: "127.0.0.1"
+redmine_db_name: "redmine"
+redmine_db_username: "admin"
+redmine_db_password: "qfwj45hq"
+redmine_project_repo: "https://github.com/redmine/redmine.git"
 redmine_path: "/opt/redmine"
-redmine_proxy: "/etc/nginx/conf.d/redmine_proxy"
-redmine_public: "{{ redmine_path }}/public"
-redmine_version: "2.6.0"
+redmine_lang: "en"
 
-target_dump: "/opt/redmine.sql.bz2"
-target_files: "/opt/redmine.tar.bz2"
+mysql_databases:
+ - name: "{{ redmine_db_name }}"
+mysql_users:
+ - name: "{{ redmine_db_username }}"
+   pass: "{{ redmine_db_password }}"
+   priv: "{{ redmine_db_name }}.*:ALL"
+   
+redmine_db_backup_dump: "/opt/redmine.sql.bz2"
 
-ssl_cert: "/etc/ssl/local/server.crt"
-ssl_key: "/etc/ssl/local/server.key"
-
-
-update: false
-nginx: false
+redmine_update: false
