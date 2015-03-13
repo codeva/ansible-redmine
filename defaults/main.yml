@@ -14,7 +14,7 @@ mysql_databases:
  - name: "{{ redmine_db_name }}"
 mysql_users:
  - name: "{{ redmine_db_username }}"
-   pass: "{{ redmine_db_password }}"
+   password: "{{ redmine_db_password }}"
    priv: "{{ redmine_db_name }}.*:ALL"
    
 redmine_db_backup_dump: "/opt/redmine.sql.bz2"
