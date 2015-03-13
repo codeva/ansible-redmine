@@ -7,6 +7,7 @@ redmine_db_username: "admin"
 redmine_db_password: "qfwj45hq"
 redmine_project_repo: "https://github.com/redmine/redmine.git"
 redmine_path: "/opt/redmine"
+redmine_backup_path: "/backup/redmine"
 redmine_lang: "en"
 
 mysql_databases:

@@ -1,0 +1,7 @@
+BACKUP_DIRECTORY={{ redmine_backup_path }}/git.redmine
+mysqldump -u {{ redmine_db_username }} -p{{ redmine_db_password }} -h {{ redmine_db_host }} redmine > $BACKUP_DIRECTORY/redmine.sql
+rm -rf  $BACKUP_DIRECTORY/files/
+cp -r {{ redmine_path }}/files $BACKUP_DIRECTORY/
+cd $BACKUP_DIRECTORY/
+git add -A .
+git commit -m "Backup $(date --rfc-3339="s")"

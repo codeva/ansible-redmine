@@ -13,15 +13,21 @@
     - libmagickwand-dev
     - libsqlite3-dev
 
-- name: database backup
-  mysql_db: name="{{ redmine_db_name }}" login_host="{{ redmine_db_host }}" \
-            login_user="{{ redmine_db_username }}" \
-            login_password="{{ redmine_db_password }}" \
-            state=dump target="{{ redmine_db_backup_dump }}"
+- name: Database backup
+  mysql_db: name="{{ redmine_db_name }}"
+            login_host="{{ redmine_db_host }}"
+            login_user="{{ redmine_db_username }}"
+            login_password="{{ redmine_db_password }}"
+            state=dump
+            target="{{ redmine_db_backup_dump }}"
   when: redmine_update
     
 - name: Clone redmine project repository
-  git: repo={{ redmine_project_repo }} dest="{{ redmine_path }}" version='{{ redmine_version }}' accept_hostkey=yes
+  git: repo={{ redmine_project_repo }}
+       dest="{{ redmine_path }}"
+       version="{{ redmine_version }}"
+       update=no
+       accept_hostkey=yes
 
 - name: Configure redmine database
   template: src=database.yml.j2 dest="{{ redmine_path }}/config/database.yml"
@@ -93,3 +99,20 @@
   shell: bundle exec rake tmp:sessions:clear
   args:
     chdir: "{{ redmine_path }}"
+
+- name: Create backup Git repository
+  command: "{{ item }}"
+  with_items:
+  - git init {{ redmine_backup_path }}/git.redmine
+  args:
+    creates: "{{ redmine_backup_path }}/git.redmine"
+
+- name: Create backup script
+  template: src=backup.redmine.sh.j2 dest={{ redmine_backup_path }}/backup.redmine.sh mode=0700
+
+- name: Create cron job for redmine backup
+  cron: name="Backup redmine data"
+        user=root
+        minute=0
+        job={{ redmine_backup_path }}/backup.redmine.sh
+        
