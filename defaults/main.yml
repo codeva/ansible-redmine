@@ -9,6 +9,8 @@ redmine_project_repo: "https://github.com/redmine/redmine.git"
 redmine_path: "/opt/redmine"
 redmine_backup_path: "/backup/redmine"
 redmine_lang: "en"
+redmine_git_backup_email: "backup@codeva.redmine.de"
+redmine_git_backup_user: "Redmine Backup"
 
 mysql_databases:
  - name: "{{ redmine_db_name }}"

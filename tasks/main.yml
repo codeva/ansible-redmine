@@ -99,6 +99,10 @@
   shell: bundle exec rake tmp:sessions:clear
   args:
     chdir: "{{ redmine_path }}"
+    
+- name: Configure Git config
+  command: git config --global user.email "{{ redmine_git_backup_email }}"
+  command: git config --global user.email "{{ redmine_git_backup_user }}"
 
 - name: Create backup Git repository
   command: "{{ item }}"
